@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Team Generator Pro</title>
+
+<style>
+body{
+font-family: Arial, sans-serif;
+background: linear-gradient(to right, #141e30, #243b55);
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+}
+
+.container{
+background: white;
+padding: 25px;
+width: 380px;
+border-radius: 15px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+text-align: center;
+}
+
+h2{
+margin-bottom: 10px;
+}
+
+input, select{
+width: 90%;
+padding: 8px;
+margin: 8px 0;
+border-radius: 6px;
+border: 1px solid gray;
+}
+
+button{
+padding: 8px 12px;
+border: none;
+border-radius: 6px;
+background: #243b55;
+color: white;
+cursor: pointer;
+margin: 5px;
+}
+
+button:hover{
+background: #141e30;
+}
+
+#result{
+margin-top: 15px;
+text-align: left;
+}
+
+.admin{
+margin-top: 15px;
+padding-top: 10px;
+border-top: 1px solid #ddd;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🔀 Team Generator Pro</h2>
+
+<p>Enter names (comma separated):</p>
+
+<input type="text" id="names" placeholder="John, Mary, Alex, David">
+
+<p>Select Number of Teams:</p>
+
+<select id="teamCount">
+<option value="2">2 Teams</option>
+<option value="3">3 Teams</option>
+<option value="4">4 Teams</option>
+</select>
+
+<br>
+
+<button onclick="generateTeams()">Generate Teams</button>
+
+<div id="result"></div>
+
+<div class="admin">
+
+<h3>👨‍💼 Admin Panel</h3>
+
+<input type="password" id="adminPass" placeholder="Enter Admin Password">
+<br>
+<button onclick="adminMode()">Enter Admin Mode</button>
+<button onclick="resetTeams()">Reset</button>
+
+</div>
+
+</div>
+
+<script>
+
+let teams = [];
+
+function shuffle(array){
+for(let i = array.length -1; i > 0; i--){
+let j = Math.floor(Math.random() * (i + 1));
+[array[i], array[j]] = [array[j], array[i]];
+}
+}
+
+function generateTeams(){
+
+let input = document.getElementById("names").value;
+
+if(input.trim() === ""){
+alert("Please enter names!");
+return;
+}
+
+let names = input.split(",").map(name => name.trim());
+
+let teamCount = parseInt(document.getElementById("teamCount").value);
+
+shuffle(names);
+
+teams = Array.from({length: teamCount}, () => []);
+
+for(let i = 0; i < names.length; i++){
+teams[i % teamCount].push(names[i]);
+}
+
+displayTeams();
+}
+
+function displayTeams(){
+
+let result = "<h3>Teams:</h3>";
+
+teams.forEach((team, index) => {
+result += "<p><b>Team " + (index+1) + ":</b> " + team.join(", ") + "</p>";
+});
+
+document.getElementById("result").innerHTML = result;
+}
+
+function adminMode(){
+
+let password = document.getElementById("adminPass").value;
+
+if(password === "admin123"){
+alert("Admin Mode Activated ✅");
+document.body.style.background = "#000";
+}else{
+alert("Wrong Password ❌");
+}
+}
+
+function resetTeams(){
+teams = [];
+document.getElementById("result").innerHTML = "";
+document.getElementById("names").value = "";
+document.body.style.background = "linear-gradient(to right, #141e30, #243b55)";
+}
+
+</script>
+
+</body>
+</html>
